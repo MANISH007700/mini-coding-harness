@@ -3,6 +3,7 @@ import subprocess
 import re
 
 from skills.skills import SKILLS, skills_prompt, read_skill
+from tools.todo import TODO_SCHEMA, write_todos
 
 
 def bash(command: str) -> str:
@@ -42,6 +43,7 @@ TOOLS = {
     "write_file": write_file,
     "read_skill": read_skill,
     "math_tool": math_tool,
+    "write_todos": write_todos,
 }
 
 TOOL_SCHEMAS = [
@@ -134,4 +136,5 @@ TOOL_SCHEMAS = [
             },
         }
     },
+    TODO_SCHEMA,
 ]

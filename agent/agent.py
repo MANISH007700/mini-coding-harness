@@ -16,7 +16,9 @@ logger = logging.getLogger("agent")
 # llm.py, tools/ and ui/ live one level up, in manish-code/
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from context import reminder
 from llm import call_llm, SYSTEM_PROMPT
+from tools.todo import active_form
 from tools.tools import TOOLS, TOOL_SCHEMAS
 from ui import ui
 
@@ -45,9 +47,12 @@ def main():
 
         # Keep calling the model until it answers without asking for a tool.
         while True:
+            injection = reminder()
+            logger.info("[Late Injection]\n%s", injection["content"])
+
             logger.info("[LLM Request] Calling LLM with %d messages...", len(messages))
-            with ui.thinking():
-                message, usage = call_llm(messages=messages, tools=TOOL_SCHEMAS)
+            with ui.thinking(active_form()):
+                message, usage = call_llm(messages=messages + [injection], tools=TOOL_SCHEMAS)
             
             messages.append(message.model_dump(exclude_none=True))
 

@@ -6,7 +6,10 @@ from rich.panel import Panel
 from rich.table import Table
 from rich.text import Text
 
+from tools.todo import MARKS
+
 console = Console()
+TODO_STYLES = {"done": "dim strike", "in_progress": "bold magenta", "pending": "dim"}
 MAX_RESULT_LINES = 8
 
 
@@ -34,8 +37,8 @@ def prompt():
     return console.input("[bold magenta]❯[/] ")
 
 
-def thinking():
-    return console.status(Text("Thinking…", style="dim"), spinner="dots")
+def thinking(label="Thinking…"):
+    return console.status(Text(label, style="dim"), spinner="dots")
 
 
 def assistant(text):
@@ -43,7 +46,31 @@ def assistant(text):
     _row("⏺", "bold green", Markdown(text))
 
 
-def tool(name, args, result, error=False):
+def injection(text):
+    console.print()
+    console.print(Panel(
+        Text(text.strip(), style="dim"),
+        title=Text("late injection", style="italic dim"),
+        title_align="left",
+        border_style="dim",
+        expand=False,
+        padding=(0, 1),
+    ))
+
+
+def todos(items):
+    """The plan as a checklist. The raw tool output is never worth showing."""
+    done = sum(1 for t in items if t["status"] == "done")
+    console.print()
+    _row("⏺", "bold cyan", Text(f"todos {done}/{len(items)}", style="bold"))
+    for t in items:
+        style = TODO_STYLES[t["status"]]
+        _row("  " + MARKS[t["status"]], style, Text(t["content"], style=style))
+
+
+def tool(name,args, result, error=False):
+    if name == "write_todos" and not error and args.get("todos"):
+        return todos(args["todos"])
     shown = args.get("command") or args.get("path") or ", ".join(f"{k}={v!r}" for k, v in args.items())
     console.print()
     _row("⏺", "bold red" if error else "bold cyan", Text.assemble((name, "bold"), f"({shown})"))

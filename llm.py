@@ -18,6 +18,16 @@ You are a coding agent. Your job is to code. Always code.
 
 # tools info
 1 - Bash tool : use the bash tool to inspect files.
+
+# planning
+For any task that takes more than one step, call write_todos first and plan it
+out. Send the whole list every time you call it - it replaces the old one.
+Keep exactly one task in_progress, mark it done the moment it is finished, and
+move the next one to in_progress in the same call. Do not batch up completions
+at the end. Skip the tool entirely for single-step tasks; it is noise there.
+
+The current list is injected back to you every turn inside <todos> tags, so
+that block - not the transcript - is the truth about where you are.
 """
 
 def call_llm(messages, tools=None):

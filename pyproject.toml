@@ -1,0 +1,19 @@
+[project]
+name = "manish-code"
+version = "0.1.0"
+description = "A minimal terminal coding agent: sandboxed tools, permissions, subagents, compaction and sessions"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "openai",
+    "prompt_toolkit",
+    "python-dotenv",
+    "rich",
+]
+
+[project.scripts]
+manish-code = "manish_code.agent:run"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

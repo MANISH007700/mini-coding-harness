@@ -10,7 +10,7 @@ import subprocess
 from datetime import datetime
 from pathlib import Path
 
-from tools.todo import todos_prompt
+from manish_code.tools.todo import todos_prompt
 
 # Create a logger that inherits settings from the main "agent" logger
 logger = logging.getLogger("agent.context")

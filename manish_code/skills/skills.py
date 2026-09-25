@@ -1,10 +1,14 @@
 import logging
 from pathlib import Path
 
+from manish_code import config
+
 # Set up logging for this module
 logger = logging.getLogger(__name__)
 
-SKILLS_DIR = Path(__file__).parent
+# Project skills ship in this folder; personal ones live in ~/.manish-code/skills.
+# A user skill with the same name overrides the project one.
+SKILL_DIRS = [Path(__file__).parent, config.HOME / "skills"]
 
 
 def parse_skill(skill_file):
@@ -21,10 +25,10 @@ def parse_skill(skill_file):
 
 
 def find_skills():
-    """Find every skills/<name>/SKILL.md."""
-    logger.info("Scanning for skills in directory: %s", SKILLS_DIR)
+    """Find every <skill dir>/<name>/SKILL.md."""
+    logger.info("Scanning for skills in directories: %s", SKILL_DIRS)
     skills = {}
-    for skill_file in sorted(SKILLS_DIR.glob("*/SKILL.md")):
+    for skill_file in (f for d in SKILL_DIRS for f in sorted(d.glob("*/SKILL.md"))):
         meta, _ = parse_skill(skill_file)
         name = meta.get("name", skill_file.parent.name)
         skills[name] = {"description": meta.get("description", ""), "path": skill_file}

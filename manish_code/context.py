@@ -37,7 +37,9 @@ def git_state():
         if len(line) < 4:
             continue
         path = line[3:]
-        state[path] = (line[:2].strip(), file_hash(path))
+        if path == "agent.log":
+            continue  # our own log grows every turn; it is never a change the model made
+        state[path] =(line[:2].strip(), file_hash(path))
     return state
 
 

@@ -117,6 +117,11 @@ description: <when the agent should use it>
 python -m manish_code.permissions.permissions   # permission rules, including known bypass attempts
 ```
 
+## Author
+
+Built by Manish Sharma.
+More of my work is on my portfolio: [manish-luci.netlify.app](https://manish-luci.netlify.app).
+
 ## Credits
 
 The sandbox, permissions, sessions, compaction and subagent design are adapted from [avbiswas/neural-code](https://github.com/avbiswas/neural-code), the companion repo to the Neural Breakdown video on building a coding agent from scratch.
